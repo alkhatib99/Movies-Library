@@ -2,7 +2,7 @@ const express= require('express');
 const cors = require('cors');
 
 const app=express();
-app.use(cors);
+app.use(cors());
 
 
 
@@ -27,16 +27,16 @@ function Movie(title,posterPath,overView){
 
 function favoritePage(req,res)
 {
-return res.status(200).send();
+return res.status(200).send(" Welcome to favorite Page");
 };
 
 
 
 function movieHandler(req,res){
 
-        let movie = new Movie(    movieData.data.title, movieData.data.posterPath, movieData.data.overView);
-    console.log(movie);
-    return res.status(200).send(movie);
+        let movie = new Movie(    movieData.title, movieData.poster_path, movieData.overview);
+console.log("movie");
+    return res.status(200).json(movie);
 }
 
 function notFoundHndler(req,res){
@@ -45,8 +45,7 @@ function notFoundHndler(req,res){
 
 };
 
-app.listen(8080,()=>
+app.listen(8000,()=>
 {
-    console.log('listening to port 8080');
- 
-})
+    console.log('listening to port 8000');
+});
