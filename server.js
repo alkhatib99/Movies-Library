@@ -23,7 +23,7 @@ app.get('/',movieHandler);
 app.get('/person',peoplePage);
 app.get('/trending',trendingPage);
 app.get('/search', searchPage)
-app.get('/search', letestPage)
+app.get('/latest', letestPage)
 app.use('*',notFoundHndler);
 //constructor
 Person.allpersons=[];
@@ -56,7 +56,10 @@ return res.status(200).json(movie);
 }
 function searchPage(req,res)
 {
-    axois.get(`https://api.themoviedb.org/3/search/movie?api_key=${apikey}&query=Hulk`).then(data=>{
+
+    let Movie = req.query.Movie ;
+   //  name=prompt('enter movie Name');
+    axois.get(`https://api.themoviedb.org/3/search/movie?api_key=${apikey}&query=${Movie}`).then(data=>{
     
         let movies =data.data.results.map(elem=>{return  { id:elem.id,title:elem.title,release_date:elem.release_date,poster_path:elem.poster_path,overview:elem.overview};});
     return res.status(200).json(movies);
@@ -66,8 +69,13 @@ function searchPage(req,res)
 }
 function trendingPage(req, res)
 {
-    axois.get(urlPerson).then(data=>{
-        let movies =data.data.results.map(elem=>{return  {id:elem.id,title:elem.title,release_date:elem.release_date,poster_path:elem.poster_path,overview:elem.overview};});
+    axois.get(`https://api.themoviedb.org/3/trending/all/week?api_key=${apikey}`).then(data=>{
+ 
+        console.log(data);
+        let movies =data.data.results.map(elem=>{
+            console.log(elem);
+            return  {id:elem.id,title:elem.title,release_date:elem.release_date,poster_path:elem.poster_path,overview:elem.overview};});
+       
         return res.status(200).json(movies);
 }).catch(err=>{
 console.log(err);
@@ -105,8 +113,10 @@ function letestPage(req,res){
 
 axois.get(`https://api.themoviedb.org/3/movie/latest?api_key=${apikey}`).then(data=>{
 
-  //  console.log(data);
-  let movies =data.data.results.map(elem=>{return new Movie(elem.id,elem.title,elem.release_date,elem.poster_path,elem.overview);});
+   console.log(res);
+   let  elem=data.data;
+  let movies ={id:elem.id,title:elem.title,relase_date:elem.release_date,poster_path:elem.poster_path,overview:elem.overview};
+
     return res.status(200).json(movies);}).catch(err=>{
 return res.status(401).send(err);
 });
