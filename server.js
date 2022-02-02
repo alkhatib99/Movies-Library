@@ -89,9 +89,9 @@ function peoplePage(req,res)
     axois.get(urlPerson)
     .then((data)=>{
         // console.log(data.data);
-        let res=data.data.results;
+        let resault=data.data.results;
 // console.log(res);
-      let persons=  res.map((elm)=>{
+      let persons=  resault.map((elm)=>{
         return {id:elm.id,name:elm.name,profile_path:elm.profile_path}; 
         
         //  console.log(elm.id);
