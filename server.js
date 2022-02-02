@@ -7,7 +7,6 @@ app.use(cors());
 const port=process.env.PORT;
 const apikey=process.env.APIKEY;
 
-let urlPerson=`https://api.themoviedb.org/3/person/popular?api_key=${process.env.APIKEY}`;
 let movieData = require('./MovieData/data.json');
 // const json = require('express/lib/response');
 // const url=require(`https://api.themoviedb.org/3/movie/76341?api_key=${apikey}`);
@@ -86,12 +85,12 @@ return res.status(500).send(err);
 function peoplePage(req,res)
 {
 
-    axois.get(urlPerson)
+    axois.get(`https://api.themoviedb.org/3/person/popular?api_key=${process.env.APIKEY}`)
     .then((data)=>{
         // console.log(data.data);
-        let res=data.data.results;
+        let resault=data.data.results;
 // console.log(res);
-      let persons=  res.map((elm)=>{
+      let persons=  resault.map((elm)=>{
         return {id:elm.id,name:elm.name,profile_path:elm.profile_path}; 
         
         //  console.log(elm.id);
