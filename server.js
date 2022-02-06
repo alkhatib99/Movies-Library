@@ -1,3 +1,5 @@
+'use strict';
+
 require('dotenv').config();
 const express= require('express');
 const cors = require('cors');
@@ -6,24 +8,37 @@ const app=express();
 app.use(cors());
 const port=process.env.PORT;
 const apikey=process.env.APIKEY;
+const pg = require('pg');
+// in terminal CREATE DATABASE MoviesLibrary
+// DATABASE_URL=postgres://alkhatib99:102030@localhost:5432/MoviesLibrary
+const client = new pg.Client(process.env.DATABASE_URL);
+
 
 let movieData = require('./MovieData/data.json');
 // const json = require('express/lib/response');
 // const url=require(`https://api.themoviedb.org/3/movie/76341?api_key=${apikey}`);
 ///// endpoints 
 //axois.get(url);
+client.connect().then(()=>{
+    app.listen(port,()=>
+    {
+        console.log(`listening to port${port}`);
+    });
 
-app.listen(port,()=>
-{
-    console.log('listening to port 3000');
 });
+
  
+app.use(express.json())
 app.get('/',movieHandler);
-app.get('/person',peoplePage);
+app.get('/person',peoplePage); 
 app.get('/trending',trendingPage);
-app.get('/search', searchPage)
-app.get('/latest', letestPage)
+app.get('/search', searchPage);
+app.get('/latest', letestPage);
+app.post('/add', addMovie);
+app.get('/favMovie', favHandler);
+
 app.use('*',notFoundHndler);
+app.use*(errorHandler);
 //constructor
 Person.allpersons=[];
 
@@ -41,6 +56,13 @@ function Movie(id,title,release_date,poster_path,overview){
     this.overview=overview;
     
 }
+function errorHandler (error,req,res){
+    const err = {
+         status : 500,
+         messgae : error
+     }
+     res.status(500).send(err);
+ }
 function Person(id,name,profile_path)
 {
     this.id=id;
@@ -66,6 +88,28 @@ function searchPage(req,res)
     return res.status(401).send(err);
     })
 }
+
+function addMovie(req,res){
+const movie=req.body;
+let sql = `INSERT INTO favMovies(title,release_date, poster_path,overview ) VALUES($1,$2,$3,$4) RETURNING *;`
+    // console.log(req.body);
+let values = [movie.title,movie.release_date,movie.poster_path,movie.overview];
+client.query(sql,values).then(data=>{
+    res.status(200).json(data.rows);
+}).catch(err=>{
+    errorHandler(err,req,res);
+})
+};
+
+
+function favHandler(req,res){
+    let sql = `SELECT * FROM favMovies;`;
+    client.query(sql).then(data=>{
+       res.status(200).json(data.rows);
+    }).catch(error=>{
+        errorHandler(error,req,res)
+    });
+};
 function trendingPage(req, res)
 {
     axois.get(`https://api.themoviedb.org/3/trending/all/week?api_key=${apikey}`).then(data=>{

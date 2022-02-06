@@ -13,6 +13,9 @@ This is an simple drawing of WRRC.
 Another simple drawing of WRRC.
 !image['Drawing WRRC'](./images/wrrc2.jpg)
 
+Another simple drawing of WRRC - Task13.
+!image['Drawing WRRC'](./images/wrrc3.jpg)
+
 ## Overview
 
 > it's an Movie-Library Web-App, include folder name Movie data that's include file name data.json.....
@@ -35,5 +38,13 @@ new features:
 - add handler for search page.
 - add handler for latest page.
 - add handler for person page.
+
+### In task 13
+
+- create a clinet connect to database.
+- create relation called "favmovies".
+- add handler using post method '/add' then insert body data to the relation.
+- add handler to get the rows '/favMovie'.
+- last thing edit the errorhandler to catch all server errors.
 
 ....Will continue.
