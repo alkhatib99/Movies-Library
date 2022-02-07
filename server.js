@@ -11,7 +11,9 @@ const apikey=process.env.APIKEY;
 const pg = require('pg');
 // in terminal CREATE DATABASE MoviesLibrary
 // DATABASE_URL=postgres://alkhatib99:102030@localhost:5432/MoviesLibrary
-const client = new pg.Client(process.env.DATABASE_URL);
+const client = new pg.Client({
+connectionString:process.env.DATABASE_URL,ssl:{rejectUnauthorized: false}
+});
 
 
 let movieData = require('./MovieData/data.json');
