@@ -37,6 +37,13 @@ app.get('/latest', letestPage);
 app.post('/add', addMovie);
 app.get('/favMovie', favHandler);
 
+app.get('/getMovie/:id',getMovieHandler);
+
+
+app.put('/updateMovie/:id',updateMovieHandler); 
+app.delete('/deleteMovie/:id',deleteMovieHandler);
+
+
 app.use('*',notFoundHndler);
 app.use*(errorHandler);
 //constructor
@@ -158,13 +165,56 @@ axois.get(`https://api.themoviedb.org/3/movie/latest?api_key=${apikey}`).then(da
 
    console.log(res);
    let  elem=data.data;
-  let movies ={id:elem.id,title:elem.title,relase_date:elem.release_date,poster_path:elem.poster_path,overview:elem.overview};
+  let movies ={id:elem.id,title:elem.title,release_date:elem.release_date,poster_path:elem.poster_path,overview:elem.overview};
 
     return res.status(200).json(movies);}).catch(err=>{
 return res.status(401).send(err);
 });
 
 }
+
+
+function getMovieHandler(req,res){
+
+    let sql = `SELECT * FROM favMovies WHERE id=${req.params.id};`;
+    
+
+    client.query(sql).then(data=>{
+       res.status(200).json(data.rows);
+    }).catch(error=>{
+        errorHandler(error,req,res)
+    });
+}
+
+function updateMovieHandler (req,res){
+    const id = req.params.id;
+    console.log(req.params.name);
+    const Movie = req.body;
+    const sql = `UPDATE favMovies SET title =$1, release_date = $2, poster_path = $3 ,overview=$4 WHERE id=$4 RETURNING *;`; 
+    let values=[Movie.title,Movie.release_date,Movie.poster_path,Movie.overview,id];
+    client.query(sql,values).then(data=>{
+        res.status(200).json(data.rows);
+        // res.status(204)
+    }).catch(error=>{
+        errorHandler(error,req,res)
+    });
+
+// UPDATE table_name
+// SET column1 = value1, column2 = value2, ...
+// WHERE condition;
+}
+
+function deleteMovieHandler(req,res){
+    const id = req.params.id;
+    const sql = `DELETE FROM favMovies WHERE id=${id};` 
+
+    client.query(sql).then(()=>{
+        res.status(200).send("The Movie has been deleted");
+    }).catch(error=>{
+        errorHandler(error,req,res)
+    });
+}
+
 
 function notFoundHndler(req,res){
     
