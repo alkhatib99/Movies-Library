@@ -16,6 +16,9 @@ Another simple drawing of WRRC.
 Another simple drawing of WRRC - Task13.
 !image['Drawing WRRC'](./images/wrrc3.jpg)
 
+This is an simple drawing for CRUD.
+!image['CRUD'](./images/crud.png)
+
 ## Overview
 
 > it's an Movie-Library Web-App, include folder name Movie data that's include file name data.json.....
@@ -46,5 +49,12 @@ new features:
 - add handler using post method '/add' then insert body data to the relation.
 - add handler to get the rows '/favMovie'.
 - last thing edit the errorhandler to catch all server errors.
+
+### In Task 14
+
+- Create endpoint for delete movie './delete/id'.
+- Create endpoint for update movie './update/id'.
+- Create endpoint for find one movie './getMovie/id'.
+- Draw a CRUD diagram for sql queries.
 
 ....Will continue.
