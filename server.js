@@ -31,7 +31,8 @@ client.connect().then(()=>{
 
  
 app.use(express.json())
-app.get('/',movieHandler);
+app.get('/',homePageHandler);
+app.get('/movie',movieHandler)
 app.get('/person',peoplePage); 
 app.get('/trending',trendingPage);
 app.get('/search', searchPage);
@@ -77,6 +78,11 @@ function Person(id,name,profile_path)
     this.id=id;
     this.name=name;
     this.profile_path=profile_path;
+}
+function homePageHandler(req,res){
+
+    return res.status(200).send('Hello to Movie-Library app');
+
 }
 function movieHandler(req,res){
 
