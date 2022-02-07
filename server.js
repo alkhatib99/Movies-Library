@@ -31,7 +31,8 @@ client.connect().then(()=>{
 
  
 app.use(express.json())
-app.get('/',movieHandler);
+app.get('/',homePageHandler);
+app.get('/movie',movieHandler)
 app.get('/person',peoplePage); 
 app.get('/trending',trendingPage);
 app.get('/search', searchPage);
@@ -77,6 +78,11 @@ function Person(id,name,profile_path)
     this.id=id;
     this.name=name;
     this.profile_path=profile_path;
+}
+function homePageHandler(req,res){
+
+    return res.status(200).send('Hello to Movie-Library app');
+
 }
 function movieHandler(req,res){
 
@@ -192,7 +198,7 @@ function updateMovieHandler (req,res){
     const id = req.params.id;
     console.log(req.params.name);
     const Movie = req.body;
-    const sql = `UPDATE favMovies SET title =$1, release_date = $2, poster_path = $3 ,overview=$4 WHERE id=$4 RETURNING *;`; 
+    const sql = `UPDATE favMovies SET title =$1, release_date = $2, poster_path = $3 ,overview=$4 WHERE id=$5 RETURNING *;`; 
     let values=[Movie.title,Movie.release_date,Movie.poster_path,Movie.overview,id];
     client.query(sql,values).then(data=>{
         res.status(200).json(data.rows);
